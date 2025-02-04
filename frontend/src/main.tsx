@@ -7,7 +7,7 @@ import ReactDOM from "react-dom/client";
 import "@iota/dapp-kit/dist/index.css";
 import "@radix-ui/themes/styles.css";
 
-import { IotaClientProvider, WalletProvider } from "@iota/dapp-kit";
+import { darkTheme, IotaClientProvider, WalletProvider } from "@iota/dapp-kit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Theme } from "@radix-ui/themes";
 import App from "./App.tsx";
@@ -19,8 +19,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Theme appearance="dark">
       <QueryClientProvider client={queryClient}>
-        <IotaClientProvider networks={networkConfig} defaultNetwork="testnet">
-          <WalletProvider autoConnect>
+        <IotaClientProvider networks={networkConfig} defaultNetwork="devnet">
+          <WalletProvider autoConnect theme={darkTheme}>
             <App />
           </WalletProvider>
         </IotaClientProvider>
