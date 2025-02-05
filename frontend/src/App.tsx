@@ -25,7 +25,6 @@ function App() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
         setIsCreator(address.address == res.result.data.content.fields.address);
       });
   }, [address]);

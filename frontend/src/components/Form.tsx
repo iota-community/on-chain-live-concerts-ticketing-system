@@ -4,23 +4,25 @@ import Button from "./Button";
 import { OpenFormState } from "../types";
 import { Box, DropdownMenu, TextField } from "@radix-ui/themes";
 import { useForm } from "../hooks/useForm";
-import { submitForm } from "../utils/submitForm";
+import  submitForm  from "../utils/submitForm";
 import { Button as RadixButton } from "@radix-ui/themes";
 
 const InputForm = ({ openForm }: { openForm: OpenFormState["openForm"] }) => {
-    const { loading, setLoading, formData, updateFormData,isError,setIsError } = useForm();
-    const validateInputs = () => {
-        switch (openForm) {
-            case "Buy":
-                return formData.coin === "" ? false : true;
-            case "BuyResale":
-                return formData.coin === "" || formData.initiatedResaleId === "" ? false : true;
-            case "ChangePrice":
-                return formData.updatedPrice === "" ? false : true;
-            case "Resale":
-                return formData.resalePrice === "" || formData.initiatedResaleId === "" ?  false : true;
-        }
-    }
+    const { 
+        loading, 
+        setLoading, 
+        formData, 
+        setFormData, 
+        updateFormData, 
+        isError, 
+        setIsError, 
+        packageId,
+        creatorObjectId,
+        categoryObjectId,
+        totalTicketObjectId,
+        soldTicketObjectId,
+        client,
+        signAndExecuteTransaction } = useForm();
 
     return (
         <div style={styles.formContainer}>
@@ -123,12 +125,26 @@ const InputForm = ({ openForm }: { openForm: OpenFormState["openForm"] }) => {
                 <Box style={{ display: "flex", justifyContent: "center" }}>
                     <Button
                         disabled={loading}
-                        onClick={e => submitForm(e,openForm, formData,validateInputs,setLoading,submitForm,setIsError)}
+                        onClick={(e) => submitForm(
+                            e,
+                            openForm,
+                            formData,
+                            setFormData,
+                            packageId,
+                            creatorObjectId,
+                            categoryObjectId,
+                            totalTicketObjectId,
+                            soldTicketObjectId,
+                            signAndExecuteTransaction,
+                            client,
+                            setLoading,
+                            setIsError
+                        )}
                         title={"Submit"}
                     />
                 </Box>
                 <Box>
-                    {isError && <p style={{fontSize:"small",color:"red"}}>{"All fields are mandatory*"}</p>}
+                    {isError && <p style={{ fontSize: "small", color: "red" }}>{"All fields are mandatory*"}</p>}
                 </Box>
             </Form.Root>
         </div>
