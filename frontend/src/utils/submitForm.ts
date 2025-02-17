@@ -36,29 +36,29 @@ export default (
         switch (openForm) {
             case "Buy":
                 return [
-                    tx.object(formData.coin as string),
+                    [tx.object(formData.coin as string),
                     tx.object(creatorObjectId),
                     tx.pure.vector("u8", formData.category?.split('').map(char => char.charCodeAt(0))),
                     tx.object(categoryObjectId),
                     tx.object(totalTicketObjectId),
-                    tx.object(soldTicketObjectId)
+                    tx.object(soldTicketObjectId)], 'buy_ticket'
                 ];
             case "BuyResale":
                 return [
-                    tx.object(formData.coin as string),
-                    tx.object(formData.initiatedResaleId as string)
+                    [tx.object(formData.coin as string),
+                    tx.object(formData.initiatedResaleId as string)], 'buy_resale_ticket'
                 ];
             case "ChangePrice":
                 return [
-                    tx.object(creatorObjectId),
+                    [tx.object(creatorObjectId),
                     tx.pure.vector("u8", formData.category?.split('').map(char => char.charCodeAt(0))),
                     tx.pure.u64(formData.updatedPrice as string),
-                    tx.object(categoryObjectId as string),
+                    tx.object(categoryObjectId as string)], 'change_price'
                 ];
             case "Resale":
                 return [
-                    tx.object(formData.nft as string),
-                    tx.pure.u64(formData.resalePrice as string)
+                    [tx.object(formData.nft as string),
+                    tx.pure.u64(formData.resalePrice as string)], 'resale_ticket'
                 ];
         }
     }
@@ -67,11 +67,12 @@ export default (
         setLoading(true)
         const tx = () => {
             const tx = new Transaction();
+            const [arguments, functionName] = getArguments(tx);
             tx.setGasBudget(50000000);
             if (formData.category) {
                 tx.moveCall({
-                    target: `${packageId}::live_concert::buy_ticket`,
-                    arguments: getArguments(tx),
+                    target: `${packageId}::live_concert::${functionName}`,
+                    arguments,
                 });
             }
             return tx;
